@@ -10,28 +10,34 @@ return function(button_list)
 	}
 	-- CM20200523: Removing bottomcap trying to fix glitch graphics.
 	-- CM20200524: Success!
+	-- CM20200524: Glitches are still an issue, I will resize graphics to 
+	-------------- see if it helps.
+	-- CM20200524: It worked, the problem was 'pixels_after_note'.
+	-- CM20200524: When hold is not long enough it draws the tail at the
+	-------------- back of the tapnote, it looks ugly...
 	local function hold_length(button)
 		return {
-			pixels_before_note= bef_note[button], pixels_after_note= -32,
-			topcap_pixels= 0, body_pixels= 1, bottomcap_pixels=0,
+			pixels_before_note= bef_note[button], pixels_after_note= 0,
+			topcap_pixels= 0, body_pixels= 2, bottomcap_pixels=0,
 		}
 	end
-	local function a_hold(states,button)
+	local function a_hold(states,button,flip_mode)
 		return {
 			state_map= states,
 			textures= {button.." Hold"},
 			length_data= hold_length(button),
+			flip= flip_mode,
 		}
 	end
-	local function holds (button)
+	local function holds (button,flip_mode)
 		return {	
 			TapNoteSubType_Hold= {
-				a_hold(tap_states,button),
-				a_hold(tap_states,button),
+				a_hold(tap_states,button,flip_mode),
+				a_hold(tap_states,button,flip_mode),
 			},
 			TapNoteSubType_Roll= {
-				a_hold(tap_states,button),
-				a_hold(tap_states,button),
+				a_hold(tap_states,button,flip_mode),
+				a_hold(tap_states,button,flip_mode),
 			},
 		}
 	end
@@ -44,10 +50,12 @@ return function(button_list)
 			anim_uses_beats= false,
 			anim_time= 0.3,
 			taps= {
+			-- CM20200524: Adding zoom commands to remove filename tags.
 				NoteSkinTapPart_Tap= {
 					state_map= tap_states,
 					actor= Def.Sprite{
 						Texture=button.." TapNote",
+						InitCommand= function(self) self:zoom(1/1.5) end,
 					}
 				},
 				
@@ -55,13 +63,16 @@ return function(button_list)
 					state_map= tap_states,
 					actor= Def.Sprite{
 						Texture= "Mine",
+						InitCommand= function(self) self:zoom(1/1.5) end,
 					}
 				},
-					
+				
+				-- CM20200524: This needs a nice graphic.
 				NoteSkinTapPart_Lift= {
 					state_map= tap_states,
 					actor= Def.Sprite{
 						Texture= button.." TapNote",
+						InitCommand= function(self) self:zoom(1/1.5) end,
 					}
 				},
 							
@@ -103,9 +114,11 @@ return function(button_list)
 					},
 				},
 			},
-			holds= holds(button),
+			holds= holds(button,"TexCoordFlipMode_None"),
 			-- CM20200524: Pending to adjust this for reverse receptor.
-			reverse_holds= holds(button),
+			-- CM20200524: Done, but tails needs to load a different
+			-------------- graphic when reverse.
+			reverse_holds= holds(button,"TexCoordFlipMode_X"),
 		}
 	end
 	return {columns= columns, vivid_operation= true}
