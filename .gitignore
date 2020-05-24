@@ -24,6 +24,7 @@
 ###############
 _default/
 _ns/
+default/
 
 # Logs and databases #
 ######################
