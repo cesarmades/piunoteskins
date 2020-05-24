@@ -19,7 +19,7 @@ return function(button_list, stepstype, skin_params)
 	for i, button in ipairs(button_list) do
 		local column_frame= Def.ActorFrame{
 			InitCommand= function(self)
-				self:draworder(notefield_draw_order.explosion)
+				self:draworder(notefield_draw_order.explosion):basezoom(1/1.5)
 			end,
 			Def.ActorFrame{
 				InitCommand= function(self)
@@ -81,7 +81,7 @@ return function(button_list, stepstype, skin_params)
 			Def.Sprite{
 				Texture= "StepFX",
 				InitCommand= function(self)
-					self:visible(false):zoom(1/1.5):blend("BlendMode_Add"):animate(false):queuecommand("f0")
+					self:visible(false):blend("BlendMode_Add"):animate(false):queuecommand("f0")
 				end,
 				
 				ColumnJudgmentCommand= function(self, param)
