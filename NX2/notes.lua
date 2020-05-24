@@ -8,12 +8,12 @@ return function(button_list)
 		UpRight = 0,
 		DownRight = 0,
 	}
-	-- CM20200503: Make this independent per column.
-	-- CM20200517: Done.
+	-- CM20200523: Removing bottomcap trying to fix glitch graphics.
+	-- CM20200524: Success!
 	local function hold_length(button)
 		return {
-			pixels_before_note= bef_note[button], pixels_after_note= 32,
-			topcap_pixels= 0, body_pixels= 64, bottomcap_pixels=64,
+			pixels_before_note= bef_note[button], pixels_after_note= -32,
+			topcap_pixels= 0, body_pixels= 1, bottomcap_pixels=0,
 		}
 	end
 	local function a_hold(states,button)
@@ -66,21 +66,45 @@ return function(button_list)
 				},
 							
 			},
+			-- CM20200523: Removed hold head since it fallbacks to the tap note.
 			optional_taps= {
-				NoteSkinTapOptionalPart_HoldHead= {
+				-- NoteSkinTapOptionalPart_HoldHead= {
+					-- state_map= tap_states,
+					-- actor= Def.Sprite{
+						-- Texture= button.." TapNote",
+					-- }
+				-- },
+				NoteSkinTapOptionalPart_HoldTail= {
 					state_map= tap_states,
 					actor= Def.Sprite{
-						Texture= button.." TapNote",
-					}
+						Texture= button.." Tail",
+						InitCommand= function(self) self:zoom(1/1.5) end,
+					},
 				},
 				NoteSkinTapOptionalPart_RollHead= {
 					state_map= tap_states,
 					actor= Def.Sprite{
 						Texture= button.." Roll",
-					}
+						InitCommand= function(self) self:zoom(1/1.5) end,
+					},
+				},
+				NoteSkinTapOptionalPart_RollTail= {
+					state_map= tap_states,
+					actor= Def.Sprite{
+						Texture= button.." Tail",
+						InitCommand= function(self) self:zoom(1/1.5) end,
+					},
+				},
+				NoteSkinTapOptionalPart_CheckpointTail= {
+					state_map= tap_states,
+					actor= Def.Sprite{
+						Texture= button.." Tail",
+						InitCommand= function(self) self:zoom(1/1.5) end,
+					},
 				},
 			},
 			holds= holds(button),
+			-- CM20200524: Pending to adjust this for reverse receptor.
 			reverse_holds= holds(button),
 		}
 	end
