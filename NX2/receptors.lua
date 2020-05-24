@@ -18,21 +18,15 @@ return function(button_list, stepstype, skin_parameters)
 			ret[i]= Def.ActorFrame{
 				Def.Sprite{
 					Texture= "Center Receptor",
-					InitCommand= function(self)
-						self:animate(false):setstate(0)
-					end,
+					InitCommand= function(self) self:animate(false):setstate(0):basezoom(1/1.5) end,
 				},
 				Def.Sprite{
 					Texture= "Center Receptor",
-					InitCommand= function(self)
-						self:animate(false):setstate(1):blend("BlendMode_Add"):effectclock("beat"):diffuseramp()
-					end,
+					InitCommand= function(self) self:animate(false):setstate(1):basezoom(1/1.5):blend("BlendMode_Add"):effectclock("beat"):diffuseramp() end,
 				},
 				Def.Sprite{
 					Texture= "Tap",
-					InitCommand= function(self)
-						self:draworder(notefield_draw_order.explosion):addy(-1):visible(false):animate(false):setstate(tap_press[button])
-					end,
+					InitCommand= function(self) self:draworder(notefield_draw_order.explosion):addy(-1):visible(false):animate(false):setstate(tap_press[button]):basezoom(1/1.5) end,
 					
 					ColumnJudgmentCommand= function(self, param)
 						self.tap_note_score = param.tap_note_score
@@ -54,9 +48,7 @@ return function(button_list, stepstype, skin_parameters)
 		else
 			ret[i]= Def.Sprite{
 				Texture= "Tap",
-				InitCommand= function(self)
-					self:draworder(notefield_draw_order.explosion):addy(-1):visible(false):animate(false):setstate(tap_press[button])
-				end,
+				InitCommand= function(self) self:draworder(notefield_draw_order.explosion):addy(-1):visible(false):animate(false):setstate(tap_press[button]):basezoom(1/1.5) end,
 				
 				ColumnJudgmentCommand= function(self, param)
 					self.tap_note_score = param.tap_note_score
