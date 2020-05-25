@@ -12,6 +12,7 @@ return function(button_list, stepstype, skin_parameters)
 	-- CM20200503: I need to find a way to avoid tap press to appear when
 	-------------- taps are getting a score.
 	-- CM20200503: Done.
+	-- CM20200524: Add halfdouble receptor.
 	
 	for i, button in ipairs(button_list) do
 		if button == "Center" then
