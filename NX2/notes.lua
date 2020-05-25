@@ -1,5 +1,16 @@
-return function(button_list)
+local skin_name = Var("skin_name");
+return function(button_list, stepstype, skin_parameters)
 	local tap_states= NoteSkin.single_quanta_state_map{1, 2, 3, 4, 5, 6}
+	-
+	local routine_states = {
+		parts_per_beat = 48,
+		quanta = {
+			{per_beat = 1, states = {1, 2, 3, 4, 5, 6}}, -- P1
+			{per_beat = 2, states = {7, 8, 9, 10, 11, 12}}, -- P2
+			{per_beat = 3, states = {13, 14, 15, 16, 17, 18}}, -- P3
+			{per_beat = 4, states = {19, 20, 21, 22, 23, 24}}, -- P4
+		},
+	}
 	
 	local bef_note= {
 		DownLeft = 0,
@@ -43,6 +54,14 @@ return function(button_list)
 	end
 	local columns= {}
 	for i, button in ipairs(button_list) do
+		local column_state = tap_states;
+		local tap_tex = button.." TapNote";
+
+		if GAMEMAN:stepstype_is_multiplayer(stepstype) then
+			column_state = routine_states;
+			tap_tex = "Routine/"..button.." TapNote"
+		end
+		
 		columns[i]= {
 			width= 64, 
 			padding= -14,
@@ -51,10 +70,11 @@ return function(button_list)
 			anim_time= 0.3,
 			taps= {
 			-- CM20200524: Adding zoom commands to remove filename tags.
+			-- CM20200524: Adding routine taps.
 				NoteSkinTapPart_Tap= {
-					state_map= tap_states,
+					state_map= column_state,
 					actor= Def.Sprite{
-						Texture=button.." TapNote",
+						Texture= tap_tex,
 						InitCommand= function(self) self:zoom(1/1.5) end,
 					}
 				},
