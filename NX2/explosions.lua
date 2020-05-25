@@ -108,7 +108,7 @@ return function(button_list, stepstype, skin_params)
 					-- elseif GAMESTATE:IsSideJoined(PLAYER_2) then
 						-- self:x(640):y(SCREEN_CENTER_Y):scaletoclipped(SCREEN_WIDTH*0.5,SCREEN_HEIGHT*2)
 					-- elseif player == 3 then
-						self:visible(false):x(SCREEN_CENTER_X):y(SCREEN_CENTER_Y):scaletoclipped(SCREEN_WIDTH*2,SCREEN_HEIGHT*2)
+						self:visible(false):x(SCREEN_CENTER_X):y(SCREEN_CENTER_Y):scaletoclipped(SCREEN_WIDTH*4,SCREEN_HEIGHT*4)
 					-- end
 				end,
 				ColumnJudgmentCommand= function(self, param)
