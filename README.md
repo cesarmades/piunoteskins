@@ -6,7 +6,7 @@ Port of official Pump It Up noteskins to StepMania 5.2 (NewSkins).
 
 Available NoteSkins are listed below:
 
-| Skin | | Additional info |
+| Skin | Introduced at | Additional info |
 | ------ | ------ | ------ |
 | **PREMIERE** | Pump It Up: The Premiere (Arcade / 2001). | Default skin. Also known as PSYOR. |
 | **FLOWER CARD** | Pump It Up: Exceed 2 (Arcade / 2005). | Unlockable by code. Also known as HWATOO, GOSTOP, etc. |
