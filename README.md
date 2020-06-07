@@ -2,7 +2,7 @@
 
 Port of official Pump It Up noteskins to StepMania 5.2 (NewSkins).
 
-### Current state
+### Current state (June 7th, 2020)
 
 Available NoteSkins are listed below:
 
