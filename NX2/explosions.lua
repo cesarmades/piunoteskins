@@ -1,3 +1,15 @@
+--[[TO-DO] -------------------------------------------------------------------------------------------------
+
+--]] -------------------------------------------------------------------------------------------------------
+
+--[[UPDATES] -----------------------------------------------------------------------------------------------
+	CM20200503:	At the step preview of the luizsan theme it shows the black border even having the additive
+				blend enabled. That's why I left StepFX not visible at Init.
+				Pending make mine explosions player independent...
+	CM20200607:	Changed paths to load from HD folder.
+				Added Taps and TapNotes for Routine Explosion.
+--]] -------------------------------------------------------------------------------------------------------
+
 local score= {
 	TapNoteScore_W1= true,
 	TapNoteScore_W2= true,
@@ -7,7 +19,8 @@ local score= {
 	HoldNoteScore_Held= true,
 }
 
-return function(button_list, stepstype, skin_params)
+local skin_name = Var("skin_name");
+return function(button_list, stepstype, skin_parameters)
 	local ret= {}
 	local tap_expl= {
 		DownLeft= 0,
@@ -17,6 +30,14 @@ return function(button_list, stepstype, skin_params)
 		DownRight= 4
 	}
 	for i, button in ipairs(button_list) do
+		local tap_tex = NOTESKIN:get_path(skin_name, "HD/Tap");
+		local tapn_tex = NOTESKIN:get_path(skin_name, "HD/" .. button.." TapNote");
+
+		if GAMEMAN:stepstype_is_multiplayer(stepstype) then
+			tap_tex = NOTESKIN:get_path(skin_name, "HD/Routine/Tap");
+			tapn_tex = NOTESKIN:get_path(skin_name, "HD/Routine/" .. button.." TapNote");
+		end
+		
 		local column_frame= Def.ActorFrame{
 			InitCommand= function(self)
 				self:draworder(notefield_draw_order.explosion):basezoom(1/1.5)
@@ -31,20 +52,6 @@ return function(button_list, stepstype, skin_params)
 					end
 				end,
 				
-				-- CM20200503: This serves no purpose for PUMP noteskins.
-				--[[HoldCommand= function(self, param)
-					if score[param.hold_note_score] == true then
-						if param.start then
-							self:visible(true):playcommand("expl"):sleep(0):queuecommand("hide")
-						elseif param.finished then
-							self:visible(true):playcommand("expl"):sleep(0):queuecommand("hide")
-						else
-							self:queuecommand("hide")
-						end
-					end
-				end,
-				]]
-				
 				explCommand= function(self)
 					self:stoptweening():zoom(1):diffusealpha(1):linear(0.4):zoom(1.2):diffusealpha(0)
 				end,
@@ -53,15 +60,14 @@ return function(button_list, stepstype, skin_params)
 				end,
 				
 				Def.Sprite{
-					Texture= "Tap",
+					Texture= tap_tex,
 					InitCommand= function(self)
 						self:addy(-1):animate(false):setstate(tap_expl[button]):blend("BlendMode_Add")
 					end,
 				},
-				-- CM20200503: Make tapnote animation non beat based.
-				-- CM20200517: Done.
+				
 				Def.Sprite{
-					Texture= button .. " TapNote",
+					Texture= tapn_tex,
 					InitCommand= function(self)
 						self:visible(true):blend("BlendMode_Add"):playcommand("f0")
 					end,
@@ -74,12 +80,9 @@ return function(button_list, stepstype, skin_params)
 					f5Command= function (self) self:setstate(5):sleep(0.05):queuecommand("f0") end,
 				},
 			},
-			-- CM20200503: At the step preview of the luizsan theme it
-			-------------- shows the black border even having the additive
-			-------------- blend enabled. That's why I left this not
-			-------------- visible.
+			
 			Def.Sprite{
-				Texture= "StepFX",
+				Texture= NOTESKIN:get_path(skin_name, "HD/StepFX"),
 				InitCommand= function(self)
 					self:visible(false):blend("BlendMode_Add"):animate(false):queuecommand("f0")
 				end,
@@ -100,7 +103,6 @@ return function(button_list, stepstype, skin_params)
 					self:stoptweening():visible(false)
 				end,
 			},
-			-- CM20200503: Pending make this player independent...
 			Def.Quad{
 				InitCommand= function(self)
 					-- if GAMESTATE:IsSideJoined(PLAYER_1) then
